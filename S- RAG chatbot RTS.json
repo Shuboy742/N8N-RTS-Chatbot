@@ -98,55 +98,8 @@
     },
     {
       "parameters": {
-        "updates": [
-          "messages"
-        ],
-        "options": {}
-      },
-      "type": "n8n-nodes-base.whatsAppTrigger",
-      "typeVersion": 1,
-      "position": [
-        -592,
-        240
-      ],
-      "id": "b4c61d83-06e1-46ba-9da8-9dee4d5447f4",
-      "name": "WhatsApp Trigger",
-      "webhookId": "8865cc3a-e665-4036-b3ae-725bc75fedbc",
-      "credentials": {
-        "whatsAppTriggerApi": {
-          "id": "nFLu1HndlPeph0K9",
-          "name": "WhatsApp OAuth account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "send",
-        "phoneNumberId": "=723811444157217",
-        "recipientPhoneNumber": "+919370392907",
-        "textBody": "={{ $json.output }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.whatsApp",
-      "typeVersion": 1,
-      "position": [
-        256,
-        240
-      ],
-      "id": "cc8e42f1-9c74-43a3-86bb-844ca58b7511",
-      "name": "Send message",
-      "webhookId": "3a670500-b803-439d-9c4b-90263a94dacd",
-      "credentials": {
-        "whatsAppApi": {
-          "id": "3c8KejbXrt1s9xkg",
-          "name": "WhatsApp account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts  [0].wa_id }}",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts\n[0].wa_id }}",
         "contextWindowLength": 15
       },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
@@ -157,6 +110,53 @@
       ],
       "id": "48b75bfa-e66b-44ca-b6db-3d225eb0f54e",
       "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=723811444157217",
+        "recipientPhoneNumber": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        96,
+        240
+      ],
+      "id": "cc8e42f1-9c74-43a3-86bb-844ca58b7511",
+      "name": "Send message",
+      "webhookId": "3a670500-b803-439d-9c4b-90263a94dacd",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ZhBS0DpY3NRPsXbd",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        240
+      ],
+      "id": "088b6371-a0b8-4060-a041-4435bf670bf4",
+      "name": "WhatsApp Trigger",
+      "webhookId": "6da10e95-b055-4bfe-a7f1-614a26ca183a",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "S0dNBQ9Kd3xyVf6E",
+          "name": "WhatsApp OAuth account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -210,17 +210,6 @@
         ]
       ]
     },
-    "WhatsApp Trigger": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "AI Agent": {
       "main": [
         [
@@ -242,13 +231,24 @@
           }
         ]
       ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "e09e10a2-55a7-4442-a74e-6e269941e456",
+  "versionId": "f4cdbb1e-43df-4ebc-8f0b-01d13c881596",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "8ae953713c63f495aeb0c0ce88c27513cafdb040e6339d2734f086347ea81adf"
