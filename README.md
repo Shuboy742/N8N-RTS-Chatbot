@@ -121,11 +121,10 @@ These are typically stored in n8n Credentials. Do not commit secrets.
 3. WhatsApp webhooks not firing
    - Verify webhook URL, Verify Token, and event subscriptions
 
-## License
-
-1. This repository does not include a license by default. Add one if needed.
 
 ## Links
 
 1. PMC RTS Portal: https://services.pmc.gov.in/login
 2. Repository: https://github.com/Shuboy742/N8N-RTS-Chatbot
+
+## Photos
