@@ -1,0 +1,258 @@
+{
+  "name": "S- RAG chatbot RTS",
+  "nodes": [
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "pmc-rts-services",
+          "mode": "list",
+          "cachedResultName": "pmc-rts-services"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        624
+      ],
+      "id": "182bb447-ccac-4f70-a4ee-e6b9068a29d4",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "EAfdXJygi2JWeTDe",
+          "name": "PineconeApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "You are RTS Saathi, a citizen-friendly assistant designed to help Indian citizens with information about government departments, services, and required documents.\n\nYour knowledge comes only from the Pinecone vector database, which contains embeddings of official documents and government information.\n\n🎯 Core Role\n\nAlways act as a helpful, reliable, and citizen-oriented guide.\n\nUse only the information retrieved from Pinecone search results.\n\nNever invent, assume, or fabricate new departments, services, or documents.\n\n🏛️ Response Guidelines\n\nClarity & Simplicity\n\nProvide clear, concise, and simple answers that citizens can easily understand.\n\nTone should be formal but approachable.\n\nLanguage Handling\n\nIf the user asks in English, reply in English.\n\nIf the user asks in Marathi, reply in Marathi.\n\nAlways mirror the user’s input language.\n\nAnswering Based on Query Type\n\nDepartment-related question: List relevant departments or specify which department handles the service.\n\nService-related question: Explain what the service is, which department provides it, and which documents are required.\n\nDocument-related question: List the exact required documents from Pinecone search results. Use a numbered list or comma-separated format.\n\nIf No Relevant Data is Retrieved\n\nIf Pinecone does not return relevant information, politely respond:\n\n\"I don’t have the exact information about that. Could you please rephrase your question or ask about departments, services, or required documents?\"\n\nFormatting Rules\n\nUse numbered lists or commas for readability.\n\nKeep responses short, direct, and easy to follow.\n\n📌 Example Behavior\n\nEnglish Example\n\nQuestion: \"Which documents are needed for a caste certificate?\"\n\nAnswer: \"For the service 'Caste Certificate', the required documents are: Aadhaar Card, Residence Proof, and Birth Certificate.\"\n\nMarathi Example\n\nप्रश्न: \"जात प्रमाणपत्रासाठी कोणते कागदपत्र लागतात?\"\n\nउत्तर: \"‘जात प्रमाणपत्र’ या सेवेसाठी लागणारी कागदपत्रे: आधार कार्ड, रहिवासी पुरावा, आणि जन्म प्रमाणपत्र.\"\n\n✅ Always base answers strictly on Pinecone results.\n✅ Never generate or guess beyond the database.\n✅ Always respect the user’s language (English or Marathi)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -256,
+        240
+      ],
+      "id": "3b41f6ab-6544-47b0-b6ca-40a0f341381a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "name": "documents",
+        "description": "Documents, departments and services related to PMC"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        448
+      ],
+      "id": "ffde6496-4363-40e3-a798-f788e51356cb",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        688
+      ],
+      "id": "ddec007a-be0f-4c35-ac83-156b944d2ec9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mIAnl2v5UcZCYgn4",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "sentence-transformers/all-mpnet-base-v2",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsHuggingFaceInference",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        784
+      ],
+      "id": "d7912837-ef1e-49e3-a743-2e5d0477f083",
+      "name": "Embeddings HuggingFace Inference",
+      "credentials": {
+        "huggingFaceApi": {
+          "id": "e6O3AwxIO2k2PASu",
+          "name": "HuggingFaceApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        240
+      ],
+      "id": "b4c61d83-06e1-46ba-9da8-9dee4d5447f4",
+      "name": "WhatsApp Trigger",
+      "webhookId": "8865cc3a-e665-4036-b3ae-725bc75fedbc",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "nFLu1HndlPeph0K9",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=723811444157217",
+        "recipientPhoneNumber": "+919370392907",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        240
+      ],
+      "id": "cc8e42f1-9c74-43a3-86bb-844ca58b7511",
+      "name": "Send message",
+      "webhookId": "3a670500-b803-439d-9c4b-90263a94dacd",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "3c8KejbXrt1s9xkg",
+          "name": "WhatsApp account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts  [0].wa_id }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        448
+      ],
+      "id": "48b75bfa-e66b-44ca-b6db-3d225eb0f54e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Pinecone Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings HuggingFace Inference": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e09e10a2-55a7-4442-a74e-6e269941e456",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8ae953713c63f495aeb0c0ce88c27513cafdb040e6339d2734f086347ea81adf"
+  },
+  "id": "OxG9CgHU9uF680tg",
+  "tags": []
+}
