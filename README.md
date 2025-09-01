@@ -128,3 +128,10 @@ These are typically stored in n8n Credentials. Do not commit secrets.
 2. Repository: https://github.com/Shuboy742/N8N-RTS-Chatbot
 
 ## Photos
+![1](https://github.com/user-attachments/assets/ad87b44b-4a4a-4bc8-bcbf-da35895874d4)
+
+![2](https://github.com/user-attachments/assets/22d02118-88b1-4b74-817f-ee48bf2f14c4)
+
+![3](https://github.com/user-attachments/assets/fd781eb3-3d1b-4df6-9fb0-dc870158a726)
+
+![4](https://github.com/user-attachments/assets/f9036fbd-7a3b-4cb4-8246-86203f669552)
